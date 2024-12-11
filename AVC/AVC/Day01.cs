@@ -12,7 +12,7 @@ namespace AVC
         {
 
             #region Members
-            List<string> data = new List<string>(File.ReadAllLines("C:\\Users\\ellio\\Documents\\Repos\\AVC\\input.txt"));
+            List<string> data = new List<string>(File.ReadAllLines("C:\\Users\\ellio\\Documents\\Repos\\AVC\\day02.txt"));
             List<int> list1 = new List<int>();
             List<int> list2 = new List<int>();
             int difference = new int();
