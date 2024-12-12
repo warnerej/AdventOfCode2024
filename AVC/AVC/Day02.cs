@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -14,54 +15,57 @@ namespace AVC
         public static void Program()
         {
             #region Members
-            List<string> data = new List<string>(File.ReadAllLines("C:\\Users\\ellio\\Documents\\Repos\\AVC\\day01.txt"));
+            List<string> data = new List<string>(File.ReadAllLines("C:\\Users\\ellio\\Documents\\Repos\\AVC\\day02.txt"));
             List<int> currentRow = new List<int>();
-            int unSafe = new int();
+            int safe = new int();
             #endregion
 
             //Getting the file Columns into different lists
             foreach (string line in data)
             {
-                line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                string direction = "none";
+                bool okay = true;
 
-                foreach (var parts in line)
+                currentRow = line.Split(' ')
+                    .Where(s => int.TryParse(s, out _))
+                    .Select(s => int.Parse(s))
+                    .ToList();
+
+                if (currentRow[0] == currentRow[1])
                 {
-                    if(int.TryParse(line, out int number))
-                    {
-                        currentRow.Add(number);
-                    }
+                    continue;
+                }
+                else if (currentRow[0] < currentRow[1])
+                {
+                    direction = "up";
+                }
+                else
+                {
+                    direction = "down";
                 }
 
-                //This needs to be redone!!!
-                for (int i = 0; i < currentRow.Count; i++)
+                for (int i = 0; i < currentRow.Count - 1; i++)
                 {
-                    if (currentRow[1] != currentRow.Count - 1)
+                    if (direction == "up" && (!(currentRow[i+1] > (currentRow[i] + 3)) && !(currentRow[i + 1] <= currentRow[i])))
                     {
-
+                        continue;
                     }
-                    else if (currentRow[1] > currentRow.Count)
+                    else if (direction == "down" && (!(currentRow[i + 1] < (currentRow[i] - 3)) && !(currentRow[i + 1] >= currentRow[i])))
                     {
-                        while (currentRow[i] > currentRow[i + 1]){
-
-                        }
-                        if (currentRow[i] != currentRow[i + 1] || (currentRow[i] - currentRow[i + 1])! > 3 && currentRow[i] > currentRow[i + 1])
-                        {
-                            unSafe += 1;
-                        }
+                        continue;
                     }
-                    else if (currentRow[1] < currentRow.Count)
+                    else
                     {
-                        if (currentRow[i] != currentRow[i + 1] || (currentRow[i] - currentRow[i + 1])! > 3 && currentRow[i] < currentRow[i + 1])
-                        {
-                            unSafe += 1;
-                        }
+                        okay = false;
                     }
                 }
-
-
+                if (okay)
+                {
+                    safe += 1;
+                }
             }
-
-
+            Console.WriteLine("Day Two Results:");
+            Console.WriteLine(safe);
         }
     }
 }
